@@ -122,15 +122,13 @@ static PREFIX_STATS *stats_prefix_find(const char *key, const size_t nkey) {
 void stats_prefix_record_get(const char *key, const size_t nkey, const bool is_hit) {
     PREFIX_STATS *pfs;
 
-    STATS_LOCK();
     pfs = stats_prefix_find(key, nkey);
     if (NULL != pfs) {
-        pfs->num_gets++;
+        __sync_fetch_and_add(&pfs->num_gets,1);
         if (is_hit) {
-            pfs->num_hits++;
+            __sync_fetch_and_add(&pfs->num_hits,1);
         }
     }
-    STATS_UNLOCK();
 }
 
 /*
@@ -139,12 +137,10 @@ void stats_prefix_record_get(const char *key, const size_t nkey, const bool is_h
 void stats_prefix_record_delete(const char *key, const size_t nkey) {
     PREFIX_STATS *pfs;
 
-    STATS_LOCK();
     pfs = stats_prefix_find(key, nkey);
     if (NULL != pfs) {
-        pfs->num_deletes++;
+        __sync_fetch_and_add(&pfs->num_deletes,1);
     }
-    STATS_UNLOCK();
 }
 
 /*
@@ -153,12 +149,10 @@ void stats_prefix_record_delete(const char *key, const size_t nkey) {
 void stats_prefix_record_set(const char *key, const size_t nkey) {
     PREFIX_STATS *pfs;
 
-    STATS_LOCK();
     pfs = stats_prefix_find(key, nkey);
     if (NULL != pfs) {
-        pfs->num_sets++;
+        __sync_fetch_and_add(&pfs->num_sets,1);
     }
-    STATS_UNLOCK();
 }
 
 /*
