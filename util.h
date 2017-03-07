@@ -1,3 +1,10 @@
+#ifndef __UTIL_H_
+#define __UTIL_H_
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 /* fast-enough functions for uriencoding strings. */
 void uriencode_init(void);
 bool uriencode(const char *src, char *dst, const size_t srclen, const size_t dstlen);
@@ -15,6 +22,10 @@ bool safe_strtoull(const char *str, uint64_t *out);
 bool safe_strtoll(const char *str, int64_t *out);
 bool safe_strtoul(const char *str, uint32_t *out);
 bool safe_strtol(const char *str, int32_t *out);
+void start_trace(void);
+void stop_trace(void);
+int test_trace(void);
+
 
 #ifndef HAVE_HTONLL
 extern uint64_t htonll(uint64_t);
@@ -35,3 +46,11 @@ extern uint64_t ntohll(uint64_t);
  */
 void vperror(const char *fmt, ...)
     __gcc_attribute__ ((format (printf, 1, 2)));
+
+#ifdef __cplusplus
+}
+#endif
+
+
+#endif
+

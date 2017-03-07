@@ -7,6 +7,7 @@
 #include <stdarg.h>
 
 #include "memcached.h"
+#include "util.h"
 
 static char *uriencode_map[256];
 static char uriencode_str[768];
@@ -41,6 +42,18 @@ bool uriencode(const char *src, char *dst, const size_t srclen, const size_t dst
     }
     dst[d] = '\0';
     return true;
+}
+
+static volatile int tracing_started=0;
+static volatile int tracing_stopped=0;
+void start_trace() {
+	tracing_started++;
+}
+void stop_trace() {
+	tracing_stopped++;
+}
+int test_trace() {
+	return tracing_started;
 }
 
 /* Avoid warnings on solaris, where isspace() is an index into an array, and gcc uses signed chars */

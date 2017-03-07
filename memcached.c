@@ -2848,6 +2848,7 @@ static void server_stats(ADD_STAT add_stats, conn *c) {
     APPEND_STAT("version", "%s", VERSION);
     APPEND_STAT("libevent", "%s", event_get_version());
     APPEND_STAT("pointer_size", "%d", (int)(8 * sizeof(void *)));
+    APPEND_STAT("tracing_invoked", "%d", test_trace());
 
 #ifndef WIN32
     append_stat("rusage_user", add_stats, c, "%ld.%06ld",
@@ -3868,6 +3869,14 @@ static void process_command(conn *c, char *command) {
     } else if (ntokens >= 2 && (strcmp(tokens[COMMAND_TOKEN].value, "stats") == 0)) {
 
         process_stat(c, tokens, ntokens);
+
+    } else if (ntokens >= 2 && (strcmp(tokens[COMMAND_TOKEN].value, "start_trace") == 0)) {
+
+        start_trace();
+
+    } else if (ntokens >= 2 && (strcmp(tokens[COMMAND_TOKEN].value, "stop_trace") == 0)) {
+
+        stop_trace();
 
     } else if (ntokens >= 2 && ntokens <= 4 && (strcmp(tokens[COMMAND_TOKEN].value, "flush_all") == 0)) {
         time_t exptime = 0;
